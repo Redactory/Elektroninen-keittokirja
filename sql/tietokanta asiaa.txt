@@ -1,0 +1,3 @@
+jdbc:postgresql://Localhost:5432/teematve
+
+8fc0040dcb8e25a8 (PostgreSQL-salasana)

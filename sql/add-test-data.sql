@@ -1,0 +1,19 @@
+INSERT INTO Kayttaja (Nimi, Tunnus, Oikeudet, Salasana) VALUES 
+('Teemu Matvejeff', 'Aeon', 0, 'Kuusi'), 
+('John Crichton', 'Loser', 0, 'Aeryn'),
+('Judge Dredd', 'Law', 1, 'Perp'), 
+('Garry Kasparow', 'ChessMaster', 2, 'Checkmate'),
+('Koevieras', 'Koe', 0, 'Koe');
+
+INSERT INTO Lisukkeet (Nimi, Ruokalaji, Kuvaus)VALUES 
+('Punaviini', 'Paahtopaisti.', 'Punaviini käy aina hyvin paahtopaistin kanssa...'),
+('Koe_viini', 'Koe_ruoka.', 'Koe_kuvaus'),
+('Salaatti', 'Kaikki ruoat.', 'Riippuu salaatin tyypistä');
+
+INSERT INTO Ruokalaji (Nimi, Kehittaja, Tyyppi, Raaka_aineet, Resepti, Kuvaus) VALUES 
+('Paahtopaisti', 'John Crichton', 'Pääruoka', 'Naudan paisti', 'Pane paisti uuniin', 'Hyvää ruokaa punaviinin kaa...'),
+('Koeruoka', 'Koevieras', 'Koe', 'Koe', 'Koe', 'Koe');
+
+INSERT INTO Ruokalajin_lisukkeet (Ruokalaji_nimi, Lisuk_nimi) VALUES 
+('Koeruoka', 'Koe_viini'),
+('Paahtopaisti', 'Salaatti');
