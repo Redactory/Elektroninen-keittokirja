@@ -4,6 +4,7 @@
  */
 package Paketit.Servletit;
 
+import Paketit.Mallit.ServlettiIsa;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -15,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author teematve
  */
-public class Muutokset extends HttpServlet {
+public class Muutokset extends ServlettiIsa {
 
     /**
      * Processes requests for both HTTP

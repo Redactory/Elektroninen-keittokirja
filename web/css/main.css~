@@ -1,6 +1,6 @@
 <style type="text/css">
 	div.yksi {
-	width: 500px;
+	  width: 500px;
   	height: 500px;
 	vertical-align: right;
 }

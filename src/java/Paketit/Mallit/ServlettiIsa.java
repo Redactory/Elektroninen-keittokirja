@@ -6,10 +6,12 @@ package Paketit.Mallit;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -27,6 +29,44 @@ public class ServlettiIsa extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    /* ******************************** */
+    //Metodi sivujen esittämistä varten.    
+    public static void naytaJSP(String sivu, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        /* Näytetään JSP-sivu.*/
+        RequestDispatcher dispatcher = request.getRequestDispatcher(sivu);
+        dispatcher.forward(request, response);
+    }
+
+    /* ******************************** */
+    //Metodi virheiden esittämistä varten.    
+    public static void naytaVirhe(HttpServletRequest request, String virheViesti) throws ServletException, IOException {
+        /* Asetetaan virheviesti */
+        request.setAttribute("Virhe", virheViesti);
+    }
+
+    /* ******************************** */
+    //Metodi kirjautumisen tarkistamista varten.
+    public static boolean onkoKirjautunut(HttpServletRequest request) {
+        
+        HttpSession session = request.getSession(false);
+        
+        if (session == null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    /* ******************************** */
+    //Metodi uloskirjautumiseen.
+    public static void kirjaudu_Ulos(HttpServletRequest request, String tunnus) {
+        HttpSession session = request.getSession();
+        session.removeAttribute("Kirjautunut");
+    }
+
+    
+    /* ******************************** */
+    //Auto-generoitu koodi.
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -35,13 +75,13 @@ public class ServlettiIsa extends HttpServlet {
             /* TODO output your page here. You may use following sample code. */
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ServlettiIsa</title>");            
+            out.println("<title>Servlet ServlettiIsa</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet ServlettiIsa at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
-        } finally {            
+        } finally {
             out.close();
         }
     }

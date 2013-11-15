@@ -4,18 +4,28 @@
  */
 package Paketit.Servletit;
 
+import Paketit.Mallit.Kayttaja;
+import Paketit.Mallit.ServlettiIsa;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.naming.NamingException;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author teematve
  */
-public class Kirjautuminen extends HttpServlet {
+public class Kirjautuminen extends ServlettiIsa {
+
+    private int i = 0;
 
     /**
      * Processes requests for both HTTP
@@ -27,22 +37,38 @@ public class Kirjautuminen extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    @Override
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
+        
+        // Pyydetyt parametrit.
+        String salasana = request.getParameter("Salasana");
+        String tunnus = request.getParameter("Tunnus");
+
         try {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet Login</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet Login at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        } finally {            
-            out.close();
+            /* Tarkistetaan mallilta onko parametrina saatu oikeat tunnukset */
+            if (Paketit.Mallit.Haut.getKayttaja(tunnus, salasana) != null) {
+                /* Jos tunnus on oikea, ohjataan käyttäjä HTTP-ohjauksella aloitussivulle. */
+                HttpSession session = request.getSession();
+                session.setAttribute("Kirjautunut", new Kayttaja(tunnus, salasana));
+                
+                response.sendRedirect("Etusivu");
+            } else {
+                /* Väärän tunnuksen syöttänyt saa eteensä lomakkeen ja virheen.
+                 * Tässä käytetään omalta yläluokalta perittyjä yleiskäyttöisiä metodeja.
+                 */
+                if (request.getMethod().equals("POST") == false) {
+                    naytaJSP("Kirjautuminen.jsp", request, response);
+                    i++;
+                } else {
+                    naytaVirhe(request, "Kirjautuminen ei onnistunut. Käyttäjää ei löytynyt");
+                    naytaJSP("Kirjautuminen.jsp", request, response);
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Kirjautuminen.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NamingException ex) {
+            Logger.getLogger(Kirjautuminen.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -57,8 +83,7 @@ public class Kirjautuminen extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         processRequest(request, response);
     }
 
@@ -72,8 +97,7 @@ public class Kirjautuminen extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         processRequest(request, response);
     }
 
