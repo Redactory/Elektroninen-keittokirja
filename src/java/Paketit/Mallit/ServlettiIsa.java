@@ -48,9 +48,12 @@ public class ServlettiIsa extends HttpServlet {
     //Metodi kirjautumisen tarkistamista varten.
     public static boolean onkoKirjautunut(HttpServletRequest request) {
         
-        HttpSession session = request.getSession(false);
+        Kayttaja k = new Kayttaja();
         
-        if (session == null) {
+        HttpSession session = request.getSession(false);
+        k = (Kayttaja)session.getAttribute("Kirjautunut");
+        
+        if (k == null) {
             return false;
         } else {
             return true;

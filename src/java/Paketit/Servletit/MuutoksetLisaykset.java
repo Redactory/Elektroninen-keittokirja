@@ -4,27 +4,22 @@
  */
 package Paketit.Servletit;
 
-import Paketit.Mallit.Kayttaja;
+import Paketit.Mallit.MuokkausToiminnot;
 import Paketit.Mallit.ServlettiIsa;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.naming.NamingException;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author teematve
  */
-public class Kirjautuminen extends ServlettiIsa {
-
+public class MuutoksetLisaykset extends ServlettiIsa {
 
     /**
      * Processes requests for both HTTP
@@ -36,37 +31,44 @@ public class Kirjautuminen extends ServlettiIsa {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    @Override
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        // Pyydetyt parametrit.
-        String salasana = request.getParameter("Salasana");
-        String tunnus = request.getParameter("Tunnus");
 
-        try {
-            /* Tarkistetaan mallilta onko parametrina saatu oikeat tunnukset */
-            if (Paketit.Mallit.Haut.getKayttaja(tunnus, salasana) != null) {
-                /* Jos tunnus on oikea, ohjataan käyttäjä HTTP-ohjauksella aloitussivulle. */
-                HttpSession session = request.getSession();
-                session.setAttribute("Kirjautunut", new Kayttaja(tunnus, salasana));
-                
-                response.sendRedirect("Etusivu");
-            } else {
-                /* Väärän tunnuksen syöttänyt saa eteensä lomakkeen ja virheen.
-                 * Tässä käytetään omalta yläluokalta perittyjä yleiskäyttöisiä metodeja.
-                 */
-                if (request.getMethod().equals("POST") == false) {
-                    naytaJSP("Kirjautuminen.jsp", request, response);
-                } else {
-                    naytaVirhe(request, "Kirjautuminen ei onnistunut. Käyttäjää ei löytynyt");
-                    naytaJSP("Kirjautuminen.jsp", request, response);
+        // Parametrien alustus.
+        String nimi = "";
+        String tunnus = "";
+        String tyyppi = "";
+        String ainekset = "";
+        String tekoOhjeet = "";
+        String kuvaus = "";
+
+        String nimenMuutos = "";
+        String aineksetMuutos = "";
+        String reseptiMuutos = "";
+        
+        
+        // Parametrit uuden tietueen luomista varten.
+        nimi = request.getParameter("name");
+        tunnus = request.getParameter("maker");
+        tyyppi = request.getParameter("type");
+        ainekset = request.getParameter("ingredients");
+        tekoOhjeet = request.getParameter("recipe");
+        kuvaus = request.getParameter("description");
+
+        if (request.getMethod().equals("POST") == false) {
+            naytaJSP("Muutokset.jsp", request, response);
+        } else {        // Ongelmia kun yrittää tehdä poistoa
+            if (!nimi.isEmpty() && !tunnus.isEmpty() && !tyyppi.isEmpty() && !ainekset.isEmpty() && !tekoOhjeet.isEmpty() && !kuvaus.isEmpty()) {
+                try {
+                    MuokkausToiminnot.Lisaa(nimi, tunnus, tyyppi, ainekset, tekoOhjeet, kuvaus);
+                    naytaJSP("Muutokset.jsp", request, response);
+                } catch (Exception ex) {
+                    Logger.getLogger(MuutoksetLisaykset.class.getName()).log(Level.SEVERE, null, ex);
                 }
+            } else {
+            naytaVirhe(request, "Nyt hommat ei menneet ihan putkeen...");
+            naytaJSP("Muutokset.jsp", request, response);
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(Kirjautuminen.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NamingException ex) {
-            Logger.getLogger(Kirjautuminen.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -81,7 +83,8 @@ public class Kirjautuminen extends ServlettiIsa {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         processRequest(request, response);
     }
 
@@ -95,7 +98,8 @@ public class Kirjautuminen extends ServlettiIsa {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         processRequest(request, response);
     }
 

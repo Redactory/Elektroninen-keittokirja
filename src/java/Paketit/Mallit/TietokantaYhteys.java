@@ -41,7 +41,7 @@ public class TietokantaYhteys {
     }
 
     /* ****************************************** */
-    //Suljetaan Stament-oli.    
+    //Suljetaan Statement-olio.    
     public static void lauseSulku(PreparedStatement query) throws Exception {
         //Suljetaan lopulta kaikki avatut resurssit
         try {

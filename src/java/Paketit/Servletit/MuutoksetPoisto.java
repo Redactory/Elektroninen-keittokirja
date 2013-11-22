@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package Paketit.Servletit;
 
 import Paketit.Mallit.MuokkausToiminnot;
@@ -19,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author teematve
  */
-public class Etusivu extends ServlettiIsa {
+public class MuutoksetPoisto extends ServlettiIsa {
 
     /**
      * Processes requests for both HTTP
@@ -33,18 +29,27 @@ public class Etusivu extends ServlettiIsa {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        if (onkoKirjautunut(request) == true) {
-                    try {
-                        MuokkausToiminnot.Listaus(request, response);
-                        naytaJSP("Etusivu_ennen.jsp", request, response);
-                    } catch (Exception ex) {
-                        Logger.getLogger(Etusivu.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-        } else {
-            naytaJSP("Kirjautuminen.jsp", request, response);
+
+        String tietueenPoisto = "";
+
+        // Parametrit tietueen poistoa varten.
+        tietueenPoisto = request.getParameter("remove");
+
+        if (request.getMethod().equals("POST") == false) {
+            naytaJSP("Muutokset.jsp", request, response);
+        } else {        // Ongelmia kun yrittää tehdä poistoa
+            if (!tietueenPoisto.isEmpty()) {
+                try {
+                    MuokkausToiminnot.Poista(tietueenPoisto);
+                    naytaJSP("Muutokset.jsp", request, response);
+                } catch (Exception ex) {
+                    Logger.getLogger(MuutoksetLisaykset.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+                naytaVirhe(request, "Nyt hommat ei menneet ihan putkeen...");
+                naytaJSP("Muutokset.jsp", request, response);
+            }
         }
-        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

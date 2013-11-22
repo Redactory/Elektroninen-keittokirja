@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package Paketit.Servletit;
 
 import Paketit.Mallit.MuokkausToiminnot;
@@ -19,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author teematve
  */
-public class Etusivu extends ServlettiIsa {
+public class MuutoksetMuokkaa extends ServlettiIsa {
 
     /**
      * Processes requests for both HTTP
@@ -33,18 +29,35 @@ public class Etusivu extends ServlettiIsa {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        if (onkoKirjautunut(request) == true) {
-                    try {
-                        MuokkausToiminnot.Listaus(request, response);
-                        naytaJSP("Etusivu_ennen.jsp", request, response);
-                    } catch (Exception ex) {
-                        Logger.getLogger(Etusivu.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+
+        // Alustetaan muuttujat.
+        String nimi = "";
+        String aineksetMuutos = "";
+        String reseptiMuutos = "";
+
+        // Parametrit tietueen muokkaamista varten.
+        nimi = request.getParameter("name");
+        aineksetMuutos = request.getParameter("igChange");
+        reseptiMuutos = request.getParameter("recipeChange");
+
+
+        if (request.getMethod().equals("POST") == false) {
+            naytaJSP("Muutokset.jsp", request, response);
         } else {
-            naytaJSP("Kirjautuminen.jsp", request, response);
+            if (!nimi.isEmpty() && 
+                    !aineksetMuutos.isEmpty() && 
+                    !reseptiMuutos.isEmpty()) {
+                try {
+                    MuokkausToiminnot.Muokkaa(nimi, aineksetMuutos, reseptiMuutos);
+                    naytaJSP("Muutokset.jsp", request, response);
+                } catch (Exception ex) {
+                    Logger.getLogger(MuutoksetMuokkaa.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+                naytaVirhe(request, "Nyt hommat ei menneet ihan putkeen...");
+                naytaJSP("Muutokset.jsp", request, response);
+            }
         }
-        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

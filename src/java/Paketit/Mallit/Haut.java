@@ -13,6 +13,8 @@ import java.util.List;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
 /**
@@ -20,6 +22,10 @@ import javax.sql.DataSource;
  * @author teematve
  */
 public class Haut {
+
+    static PreparedStatement kysely = null;
+    static Connection yhteys = null;
+    static ResultSet tulokset = null;
 
     /* ************************************** */
     //Tietyn käyttäjän haku tietokannasta.
@@ -40,11 +46,11 @@ public class Haut {
         //Alustetaan muuttuja, joka sisältää löydetyn käyttäjän
         Kayttaja kayttaja = null;
 
-        if (rs.next() == false) {
-            return null;
+        if (rs.next() == true) {
+            kayttaja = new Kayttaja(rs.getString("Nimi"), rs.getString("Tunnus"), rs.getString("Salasana"), rs.getInt("Oikeudet")); //Hakutuloksen sisältävä olio.
         }
 
-        kayttaja = new Kayttaja(rs.getString("Nimi"), rs.getString("Tunnus"), rs.getString("Salasana"), rs.getInt("Oikeudet")); //Hakutuloksen sisältävä olio.
+
         //Suljetaan kaikki resurssit:
 
         try {
@@ -97,4 +103,34 @@ public class Haut {
 
         return kayttajat;
     }
+    
+    /* ************************************** */
+    //Tietyn reseptin haku tietokannasta sen nimellä.
+    public static Kayttaja getResepti(HttpServletRequest request, HttpServletResponse response, String nimi) throws SQLException, NamingException, Exception {
+        yhteys = TietokantaYhteys.yhteydenAvaus();  //Tietokantayht. avaus
+
+        List<String> lista = new ArrayList<String>();    // Tulosten talletukseen taulukko
+
+        String sql = "SELECT * FROM Ruokalaji WHERE Nimi = ?";
+        kysely = yhteys.prepareStatement(sql);
+        kysely.setString(1, nimi);
+        tulokset = kysely.executeQuery();
+
+        // Varmistetaan ettei tyhjät tulokset pääse eteenpäin.
+        if (tulokset == null) {
+            ServlettiIsa.naytaVirhe(request, "Kyseistä ruokalajia ei löydy tietokannasta.");
+            ServlettiIsa.naytaJSP("Etusivu_jalkeen.jsp", request, response);
+        }
+
+        while (tulokset.next() == true) {
+            lista.add(tulokset.getString("Nimi"));
+        }
+
+        TietokantaYhteys.lauseSulku(kysely);           // Kyselyn sulku
+        TietokantaYhteys.tulosSulku(tulokset);         // Lauseen sulku
+        TietokantaYhteys.yhteydenSulku(yhteys);        // Tietokantayhteyden sulku.
+
+        request.setAttribute("ruokalaji", lista);
+        return null;
+    }    
 }
