@@ -62,7 +62,7 @@ public class ServlettiIsa extends HttpServlet {
 
     /* ******************************** */
     //Metodi uloskirjautumiseen.
-    public static void kirjaudu_Ulos(HttpServletRequest request, String tunnus) {
+    public static void kirjaudu_Ulos(HttpServletRequest request) {
         HttpSession session = request.getSession();
         session.removeAttribute("Kirjautunut");
     }

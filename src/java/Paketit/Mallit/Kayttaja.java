@@ -28,6 +28,10 @@ public class Kayttaja {
         this.oikeudet = 0;
     }
 
+    public Kayttaja(String nimi) { //Väliaik. konstruktori
+        this.nimi = nimi;
+    }
+
     public Kayttaja(String tunnus, String salasana) { //Väliaik. konstruktori
         this.tunnus = tunnus;
         this.salasana = salasana;
@@ -115,8 +119,6 @@ public class Kayttaja {
 
         return kayttajat;
     }
-    
     /* *********** */
     //
-    
 }

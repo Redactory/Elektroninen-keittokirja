@@ -55,7 +55,7 @@ public class MuokkausToiminnot {
         TietokantaYhteys.tulosSulku(tulokset);         // Lauseen sulku
         TietokantaYhteys.yhteydenSulku(yhteys);        // Tietokantayhteyden sulku.
 
-        request.setAttribute("ruokalaji", lista);
+        request.setAttribute("ruokalajit", lista);
     }
 
     /* ************************************** */
