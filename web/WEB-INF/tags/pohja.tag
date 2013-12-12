@@ -16,21 +16,33 @@
         <div class="navbar navbar-default">
             <div class="container">
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="#">Elektroninen keittokirja</a>
+                    <a class="navbar-brand" href="Etusivu">Elektroninen keittokirja</a>
                 </div>
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="Logout">Kirjaudu ulos</a></li>
+                    <li class="active"><a href="UlosKirjautuminen">Kirjaudu ulos</a></li>
                 </ul>
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="MuutoksetLisaykset">reseptien muokkaaminen</a></li>
+                </ul>
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="Ohjeet">Sovelluksen käyttöohjeet</a></li>
+                </ul>
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="LisukkeetLisays">Lisukkeiden muokkaaminen</a></li>
+                </ul>
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="KayttajanLisays">Käyttäjien muokkaukset (EI KUULU KURSSIIN)</a></li>
+                </ul> 
             </div>
         </div>
 
         <div class="container">
             <jsp:doBody/>
             <c:if test="${Virhe != null}" >
-                ${Virhe}
+                <h1>${Virhe}</h1>
             </c:if>
 
-            
+
         </div>
     </body>
 </html>

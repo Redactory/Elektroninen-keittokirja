@@ -25,7 +25,6 @@ import javax.servlet.http.HttpSession;
  */
 public class Kirjautuminen extends ServlettiIsa {
 
-
     /**
      * Processes requests for both HTTP
      * <code>GET</code> and
@@ -39,35 +38,36 @@ public class Kirjautuminen extends ServlettiIsa {
     @Override
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+        request.setCharacterEncoding("UTF-8");
+
         // Pyydetyt parametrit.
         String salasana = request.getParameter("Salasana");
         String tunnus = request.getParameter("Tunnus");
 
-        try {
-            /* Tarkistetaan mallilta onko parametrina saatu oikeat tunnukset */
-            if (Paketit.Mallit.Haut.getKayttaja(tunnus, salasana) != null) {
-                /* Jos tunnus on oikea, ohjataan käyttäjä HTTP-ohjauksella aloitussivulle. */
-                HttpSession session = request.getSession();
-                session.setAttribute("Kirjautunut", new Kayttaja(tunnus, salasana));
-                
-                response.sendRedirect("Etusivu");
-            } else {
-                /* Väärän tunnuksen syöttänyt saa eteensä lomakkeen ja virheen.
-                 * Tässä käytetään omalta yläluokalta perittyjä yleiskäyttöisiä metodeja.
-                 */
-                if (request.getMethod().equals("POST") == false) {
-                    naytaJSP("Kirjautuminen.jsp", request, response);
-                } else {
-                    naytaVirhe(request, "Kirjautuminen ei onnistunut. Käyttäjää ei löytynyt");
-                    naytaJSP("Kirjautuminen.jsp", request, response);
-                }
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(Kirjautuminen.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NamingException ex) {
-            Logger.getLogger(Kirjautuminen.class.getName()).log(Level.SEVERE, null, ex);
-        }
+
+                    try {
+                        /* Tarkistetaan mallilta onko parametrina saatu oikeat tunnukset */
+                        if (Paketit.Mallit.Haut.getKayttaja(tunnus, salasana) != null) {
+                            /* Jos tunnus on oikea, ohjataan käyttäjä HTTP-ohjauksella aloitussivulle. */
+                            HttpSession session = request.getSession();
+                            session.setAttribute("Kirjautunut", new Kayttaja(tunnus, salasana));
+
+                            response.sendRedirect("Etusivu");
+                        } else {
+                            /* Väärän tunnuksen syöttänyt saa eteensä lomakkeen ja virheen.
+                             * Tässä käytetään omalta yläluokalta perittyjä yleiskäyttöisiä metodeja.
+                             */
+                            if (request.getMethod().equals("POST") == false) {
+                                naytaJSP("Kirjautuminen.jsp", request, response);
+                            } else {
+                                naytaVirhe(request, "Kirjautuminen ei onnistunut. Käyttäjää ei löytynyt");
+                                naytaJSP("Kirjautuminen.jsp", request, response);
+                            }
+                        }
+                    } catch (Exception ex) {
+                        Logger.getLogger(Kirjautuminen.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

@@ -13,6 +13,10 @@
         <servlet-class>Paketit.Servletit.MuutoksetLisaykset</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>MuutoksetLisaykset</servlet-name>
+        <servlet-class>Paketit.Servletit.MuutoksetLisaykset</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>Haut</servlet-name>
         <servlet-class>Paketit.Mallit.Haut</servlet-class>
     </servlet>
@@ -29,20 +33,44 @@
         <servlet-class>Paketit.Servletit.Etusivu</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>Koehaku</servlet-name>
-        <servlet-class>Paketit.Servletit.KoeHaku</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>TestiServlet</servlet-name>
-        <servlet-class>Paketit.Servletit.TestiServlet</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>MuutoksetPoisto</servlet-name>
         <servlet-class>Paketit.Servletit.MuutoksetPoisto</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>MuutoksetMuokkaa</servlet-name>
         <servlet-class>Paketit.Servletit.MuutoksetMuokkaa</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Etusivu_jalkeen</servlet-name>
+        <servlet-class>Paketit.Servletit.Etusivu_jalkeen</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UlosKirjautuminen</servlet-name>
+        <servlet-class>Paketit.Servletit.UlosKirjautuminen</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Ohjeet</servlet-name>
+        <servlet-class>Paketit.Servletit.Ohjeet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>KayttajienMuokkaus</servlet-name>
+        <servlet-class>KayttajienMuokkaus</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>LisukkeetLisays</servlet-name>
+        <servlet-class>Paketit.Servletit.LisukkeetLisays</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>LisukkeetPoisto</servlet-name>
+        <servlet-class>Paketit.Servletit.LisukkeetPoisto</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>LisukkeetMuokkaus</servlet-name>
+        <servlet-class>Paketit.Servletit.LisukkeetMuokkaus</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Rekisteroityminen</servlet-name>
+        <servlet-class>Paketit.Servletit.Rekisteroityminen</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>ServlettiIsa</servlet-name>
@@ -73,12 +101,8 @@
         <url-pattern>/Etusivu</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>Koehaku</servlet-name>
-        <url-pattern>/Koehaku</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>TestiServlet</servlet-name>
-        <url-pattern>/TestiServlet</url-pattern>
+        <servlet-name>Muutokset</servlet-name>
+        <url-pattern>/MuutoksetLisaykset</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>MuutoksetPoisto</servlet-name>
@@ -87,6 +111,34 @@
     <servlet-mapping>
         <servlet-name>MuutoksetMuokkaa</servlet-name>
         <url-pattern>/MuutoksetMuokkaa</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Etusivu_jalkeen</servlet-name>
+        <url-pattern>/Etusivu_jalkeen</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UlosKirjautuminen</servlet-name>
+        <url-pattern>/UlosKirjautuminen</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Ohjeet</servlet-name>
+        <url-pattern>/Ohjeet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LisukkeetLisays</servlet-name>
+        <url-pattern>/LisukkeetLisays</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LisukkeetPoisto</servlet-name>
+        <url-pattern>/LisukkeetPoisto</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LisukkeetMuokkaus</servlet-name>
+        <url-pattern>/LisukkeetMuokkaus</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Rekisteroityminen</servlet-name>
+        <url-pattern>/Rekisteroityminen</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

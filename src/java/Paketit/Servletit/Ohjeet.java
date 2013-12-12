@@ -1,12 +1,8 @@
 package Paketit.Servletit;
 
-import Paketit.Mallit.Haut;
-import Paketit.Mallit.MuokkausToiminnot;
 import Paketit.Mallit.ServlettiIsa;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author teematve
  */
-public class Etusivu_jalkeen extends ServlettiIsa {
+public class Ohjeet extends ServlettiIsa {
 
     /**
      * Processes requests for both HTTP
@@ -31,30 +27,8 @@ public class Etusivu_jalkeen extends ServlettiIsa {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
-
-        String ruokalaji = "";
-        ruokalaji = request.getParameter("ruoka");
-
-        if (request.getMethod().equals("POST") == false) {
-            try {
-                MuokkausToiminnot.Listaus(request, response);
-                Haut.KaikkiLisukkeet(request, response);
-                naytaJSP("Etusivu_jalkeen.jsp", request, response);
-            } catch (Exception ex) {
-                Logger.getLogger(Etusivu.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        } else {
-            try {
-                Haut.getResepti(request, response, ruokalaji);
-                MuokkausToiminnot.Listaus(request, response);
-                Haut.KaikkiLisukkeet(request, response);
-                Haut.Lisukeet(request, response, ruokalaji);
-                naytaJSP("Etusivu_jalkeen.jsp", request, response);
-            } catch (Exception ex) {
-                Logger.getLogger(Etusivu.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-        }
+        
+        ServlettiIsa.naytaJSP("Ohjeet.jsp", request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

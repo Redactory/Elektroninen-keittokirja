@@ -32,13 +32,13 @@
 
                 <!--Segmentti, joka huolehtii reseptihaku-osuudesta-->
                 <div class="col-md-6 panel panel-default">
-                    <h2>Haku reseptin nimellä</h2>
+                    <h2>Haku Ruoan nimellä</h2>
 
-                    <form class="col-md-5 form-horizontal" role="form" action="Reseptihaku" method="POST">
+                    <form class="col-md-5 form-horizontal" role="form" action="Etusivu_jalkeen" method="POST">
                         <div class="form-group">
                             <label for="inputName1" class="col-md-2 control-label">Nimi</label>
                             <div class="col-md-5">
-                                <input type="name" class="form-control" id="inputPassword1" name="Name">
+                                <input type="name" class="form-control" id="inputPassword1" name="ruoka">
                             </div>
                         </div>
                         <div class="form-group">
@@ -53,15 +53,21 @@
                 <div class="col-md-5 panel panel-default">
                     <h2>Kaikki reseptit</h2>
                     <ul>
-                        <c:forEach var="ruoka" items="${ruokalaji}">
-                            <li>${ruoka.ruokalajinNimi}, ${ruoka.raaka_aineet}</li>
+                        <c:forEach var="ruoka" items="${ruokalajit}">
+                            <li><a href="Muutokset?nimi=<c:out value="${ruoka.ruokalajinNimi}" />"> ${ruoka.ruokalajinNimi}, ${ruoka.raaka_aineet}</a></li>
                         </c:forEach>
                     </ul>
                 </div>
-                <!--This is a comment. Comments are not displayed in the browser-->
-                    <TD><FORM METHOD="LINK" ACTION="localhost:8080/ElektroninenKeittokirja/Muutokset">
-                            <button style="float: left" type="submit3" class="btn btn-default">Lisäys/Poisto</button>
-                        </FORM></TD>
+
+                <!--Segmentti, joka huolehtii lisukkeiden listauksen.-->
+                <div class="col-md-5 panel panel-default">
+                    <h2>Kaikki lisukkeet</h2>
+                    <ul>
+                        <c:forEach var="lisukelista" items="${lisukkeita}">
+                            <li>${lisukelista.lisukkeenNimi}, ${lisukelista.ruokalajinNimi}, ${lisukelista.kuvaus}</li>
+                        </c:forEach>
+                    </ul>
+                </div>
             </div>
         </div>
     </body>

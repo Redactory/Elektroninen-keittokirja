@@ -33,8 +33,10 @@ public class ServlettiIsa extends HttpServlet {
     //Metodi sivujen esittämistä varten.    
     public static void naytaJSP(String sivu, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         /* Näytetään JSP-sivu.*/
+        if(!response.isCommitted()) {                   //Huomauta asiasta Davidille
         RequestDispatcher dispatcher = request.getRequestDispatcher(sivu);
         dispatcher.forward(request, response);
+        }
     }
 
     /* ******************************** */
@@ -59,6 +61,22 @@ public class ServlettiIsa extends HttpServlet {
             return true;
         }
     }
+    
+    /* ******************************** */
+    //Metodi oikeuksien tarkistamista varten.
+    public static int onkoOikeudet(HttpServletRequest request) {
+        
+        Kayttaja k = new Kayttaja();
+        
+        HttpSession session = request.getSession(false);
+        k = (Kayttaja)session.getAttribute("Kirjautunut");
+        
+        if (k == null) {
+            return -1;
+        } else {
+            return k.getOikeudet();
+        }
+    }    
 
     /* ******************************** */
     //Metodi uloskirjautumiseen.

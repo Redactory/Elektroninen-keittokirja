@@ -36,6 +36,8 @@ public class MuutoksetLisaykset extends ServlettiIsa {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        
         // Parametrien alustus.
         String nimi = "";
         String tekija = "";
@@ -92,13 +94,6 @@ public class MuutoksetLisaykset extends ServlettiIsa {
             } catch (Exception ex) {
                 Logger.getLogger(MuutoksetLisaykset.class.getName()).log(Level.SEVERE, null, ex);
             }
-
-//                if (nimi.isEmpty() || tunnus.isEmpty() || tyyppi.isEmpty() || ainekset.isEmpty() || tekoOhjeet.isEmpty() || kuvaus.isEmpty()) {
-//                    naytaVirhe(request, "Et ole täyttänyt kenttiä asianmukaisesti. Kaikki kentät täytyy täyttää.");
-//                    naytaJSP("Muutokset.jsp", request, response);
-//                } else if (Haut.TarkistaKayttaja(request, response, tunnus) == false) {
-//                    naytaVirhe(request, "Tekijää ei ole tietokannassa. Syötä tietokannassa jo oleva henkilö.");
-//                    naytaJSP("Muutokset.jsp", request, response);} 
             
         }
     }

@@ -4,6 +4,7 @@
  */
 package Paketit.Servletit;
 
+import Paketit.Mallit.Haut;
 import Paketit.Mallit.MuokkausToiminnot;
 import Paketit.Mallit.ServlettiIsa;
 import java.io.IOException;
@@ -33,18 +34,21 @@ public class Etusivu extends ServlettiIsa {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
 
         if (onkoKirjautunut(request) == true) {
             if (request.getMethod().equals("POST") == false) {
                 try {
                     MuokkausToiminnot.Listaus(request, response);
+                    Haut.KaikkiLisukkeet(request, response);
                     naytaJSP("Etusivu_ennen.jsp", request, response);
                 } catch (Exception ex) {
                     Logger.getLogger(Etusivu.class.getName()).log(Level.SEVERE, null, ex);
                 }
             } else {
                 try {
-                    MuokkausToiminnot.Listaus(request, response);                    
+                    MuokkausToiminnot.Listaus(request, response);
+                    Haut.KaikkiLisukkeet(request, response);
                     naytaJSP("Etusivu_ennen.jsp", request, response);
                 } catch (Exception ex) {
                     Logger.getLogger(Etusivu.class.getName()).log(Level.SEVERE, null, ex);

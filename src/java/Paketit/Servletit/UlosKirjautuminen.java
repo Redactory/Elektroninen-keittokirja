@@ -26,6 +26,8 @@ public class UlosKirjautuminen extends ServlettiIsa {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        
         kirjaudu_Ulos(request);
         naytaJSP("Kirjautuminen.jsp", request, response);
     }

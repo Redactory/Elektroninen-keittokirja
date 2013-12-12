@@ -110,19 +110,26 @@
                         <div class="form-group">
                             <label for="inputName1" class="col-md-4 control-label">Nimi</label>
                             <div class="col-md-8">
-                                <input type="text" class="form-control" id="inputPassword1" name="name">
+                                <input type="text" class="form-control" id="inputPassword1" value="" name="name">
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="inputIngredients1" class="col-md-4 control-label">Raaka-aineet</label>
+                            <label for="inputName1" class="col-md-4 control-label">Uusi nimi</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" id="inputPassword1" value="" name="newName">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="inputIngredients1" class="col-md-4 control-label">Uudet raaka-aineet</label>
                             <div class="col-md-8">
                                 <input type="text" class="form-control" id="inputPassword1" name="igChange">
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="inputRecipe1" class="col-md-4 control-label">Valmistusohjeet</label>
+                            <label for="inputRecipe1" class="col-md-4 control-label">Uudet valmistusohjeet</label>
                             <div class="col-md-5">
                                 <textarea NAME="recipeChange" rows="4" cols="50"></textarea>
                             </div>
@@ -144,6 +151,5 @@
                 </div>
             </div>
         </div>
-        <h1>${Virhe}</h1>
     </body>
 </html>

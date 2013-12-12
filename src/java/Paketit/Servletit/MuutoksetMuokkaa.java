@@ -1,5 +1,6 @@
 package Paketit.Servletit;
 
+import Paketit.Mallit.Haut;
 import Paketit.Mallit.MuokkausToiminnot;
 import Paketit.Mallit.ServlettiIsa;
 import java.io.IOException;
@@ -29,38 +30,46 @@ public class MuutoksetMuokkaa extends ServlettiIsa {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
 
         // Alustetaan muuttujat.
-        String nimi = "";
+        String vanhaNimi = "";
+        String uusiNimi = "";
         String aineksetMuutos = "";
         String reseptiMuutos = "";
 
+
         // Parametrit tietueen muokkaamista varten.
-        nimi = request.getParameter("name");
+        vanhaNimi = request.getParameter("name");
+        uusiNimi = request.getParameter("newName");
         aineksetMuutos = request.getParameter("igChange");
         reseptiMuutos = request.getParameter("recipeChange");
-
 
         if (request.getMethod().equals("POST") == false) {
             naytaJSP("Muutokset.jsp", request, response);
         } else {
-            if (!nimi.isEmpty() && 
-                    !aineksetMuutos.isEmpty() && 
-                    !reseptiMuutos.isEmpty()) {
-                try {
-                    MuokkausToiminnot.Muokkaa(nimi, aineksetMuutos, reseptiMuutos);
+            try {
+                if (Haut.TarkistaResepti(request, response, vanhaNimi) == false) {
+                    naytaVirhe(request, "Kyseistä reseptiä ei ole tietokannassa. Yritä uudelleen.");
                     naytaJSP("Muutokset.jsp", request, response);
-                } catch (Exception ex) {
-                    Logger.getLogger(MuutoksetMuokkaa.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            } else {
-                naytaVirhe(request, "Nyt hommat ei menneet ihan putkeen...");
-                naytaJSP("Muutokset.jsp", request, response);
+
+                if (!uusiNimi.isEmpty()) {
+                    MuokkausToiminnot.MuokkaaReseptinNimi(vanhaNimi, uusiNimi);
+                    naytaJSP("Muutokset.jsp", request, response);
+                }
+
+                if (!vanhaNimi.isEmpty() && !aineksetMuutos.isEmpty() && !reseptiMuutos.isEmpty()) {
+                    MuokkausToiminnot.Muokkaa(vanhaNimi, aineksetMuutos, reseptiMuutos);
+                    naytaJSP("Muutokset.jsp", request, response);
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(MuutoksetMuokkaa.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP
      * <code>GET</code> method.

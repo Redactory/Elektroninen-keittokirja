@@ -5,8 +5,10 @@ import Paketit.Mallit.MuokkausToiminnot;
 import Paketit.Mallit.ServlettiIsa;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author teematve
  */
-public class Etusivu_jalkeen extends ServlettiIsa {
+public class LisukkeetPoisto extends ServlettiIsa {
 
     /**
      * Processes requests for both HTTP
@@ -31,29 +33,40 @@ public class Etusivu_jalkeen extends ServlettiIsa {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
+        
+        String poistettavaLisuke = "";
 
-        String ruokalaji = "";
-        ruokalaji = request.getParameter("ruoka");
+        // Parametrit tietueen poistoa varten.
+        poistettavaLisuke = request.getParameter("remove");
 
         if (request.getMethod().equals("POST") == false) {
-            try {
-                MuokkausToiminnot.Listaus(request, response);
-                Haut.KaikkiLisukkeet(request, response);
-                naytaJSP("Etusivu_jalkeen.jsp", request, response);
-            } catch (Exception ex) {
-                Logger.getLogger(Etusivu.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            naytaJSP("Lisukkeet.jsp", request, response);
         } else {
             try {
-                Haut.getResepti(request, response, ruokalaji);
-                MuokkausToiminnot.Listaus(request, response);
-                Haut.KaikkiLisukkeet(request, response);
-                Haut.Lisukeet(request, response, ruokalaji);
-                naytaJSP("Etusivu_jalkeen.jsp", request, response);
+                if (Haut.TarkistaLisuke(request, response, poistettavaLisuke) == false) {
+                    naytaVirhe(request, "Kyseistä lisuketta ei ole tietokannassa. Yritä uudelleen.");
+                    naytaJSP("Lisukkeet.jsp", request, response);
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(MuutoksetPoisto.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (NamingException ex) {
+                Logger.getLogger(MuutoksetPoisto.class.getName()).log(Level.SEVERE, null, ex);
             } catch (Exception ex) {
-                Logger.getLogger(Etusivu.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(MuutoksetPoisto.class.getName()).log(Level.SEVERE, null, ex);
             }
 
+
+            if (!poistettavaLisuke.isEmpty()) {
+                try {
+                    MuokkausToiminnot.PoistaLisuke(poistettavaLisuke);
+                    naytaJSP("Lisukkeet.jsp", request, response);
+                } catch (Exception ex) {
+                    Logger.getLogger(MuutoksetLisaykset.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+                naytaVirhe(request, "Nyt hommat ei menneet ihan putkeen...");
+                naytaJSP("Lisukkeet.jsp", request, response);
+            }
         }
     }
 

@@ -5,8 +5,10 @@ import Paketit.Mallit.MuokkausToiminnot;
 import Paketit.Mallit.ServlettiIsa;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author teematve
  */
-public class Etusivu_jalkeen extends ServlettiIsa {
+public class LisukkeetLisays extends ServlettiIsa {
 
     /**
      * Processes requests for both HTTP
@@ -31,29 +33,50 @@ public class Etusivu_jalkeen extends ServlettiIsa {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
+        
+        // Parametrien alustus.
+        String nimi = "";
+        String ruoka = "";
+        String kuvaus = "";
 
-        String ruokalaji = "";
-        ruokalaji = request.getParameter("ruoka");
+
+
+        // Parametrit uuden tietueen luomista varten.
+        nimi = request.getParameter("name");
+        ruoka = request.getParameter("food");
+        kuvaus = request.getParameter("description");
+
+
 
         if (request.getMethod().equals("POST") == false) {
-            try {
-                MuokkausToiminnot.Listaus(request, response);
-                Haut.KaikkiLisukkeet(request, response);
-                naytaJSP("Etusivu_jalkeen.jsp", request, response);
-            } catch (Exception ex) {
-                Logger.getLogger(Etusivu.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            naytaJSP("Lisukkeet.jsp", request, response);
         } else {
             try {
-                Haut.getResepti(request, response, ruokalaji);
-                MuokkausToiminnot.Listaus(request, response);
-                Haut.KaikkiLisukkeet(request, response);
-                Haut.Lisukeet(request, response, ruokalaji);
-                naytaJSP("Etusivu_jalkeen.jsp", request, response);
-            } catch (Exception ex) {
-                Logger.getLogger(Etusivu.class.getName()).log(Level.SEVERE, null, ex);
-            }
 
+                if (Haut.TarkistaLisuke(request, response, nimi) == true) {
+                    naytaVirhe(request, "Tietokannassa on jo olemassa lisuke tuolla nimellä. Yritä uudelleen.");
+                    naytaJSP("Lisukkeet.jsp", request, response);
+                    return;
+                } else if (Haut.TarkistaResepti(request, response, ruoka) == false) {
+                    naytaVirhe(request, "kyseistä ruokalajia ei ole tietokannassa. Syötä tietokannassa jo olemassa oleva ruokalaji.");
+                    naytaJSP("Lisukkeet.jsp", request, response);
+                    return;
+                }
+                if (!nimi.isEmpty() && !ruoka.isEmpty() && !kuvaus.isEmpty()) {
+                    MuokkausToiminnot.LisaaLisuke(nimi, ruoka, kuvaus);
+                    naytaJSP("Lisukkeet.jsp", request, response);
+                } else {
+                    naytaVirhe(request, "Menee tähän haaraan.");
+                    naytaJSP("Lisukkeet.jsp", request, response);
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(MuutoksetLisaykset.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (NamingException ex) {
+                Logger.getLogger(MuutoksetLisaykset.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (Exception ex) {
+                Logger.getLogger(MuutoksetLisaykset.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
         }
     }
 

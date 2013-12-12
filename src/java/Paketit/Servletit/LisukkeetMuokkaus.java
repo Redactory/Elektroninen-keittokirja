@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author teematve
  */
-public class Etusivu_jalkeen extends ServlettiIsa {
+public class LisukkeetMuokkaus extends ServlettiIsa {
 
     /**
      * Processes requests for both HTTP
@@ -32,28 +32,45 @@ public class Etusivu_jalkeen extends ServlettiIsa {
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
 
-        String ruokalaji = "";
-        ruokalaji = request.getParameter("ruoka");
+        // Alustetaan muuttujat.
+        String vanhaNimi = "";
+        String kuvausMuutos = "";
+        String uusiRuoka = "";
+        String uusiNimi = "";
+
+        // Parametrit tietueen muokkaamista varten.
+        vanhaNimi = request.getParameter("oldName");
+        uusiNimi = request.getParameter("newName");
+        uusiRuoka = request.getParameter("newFood");
+        kuvausMuutos = request.getParameter("igChange");
+
 
         if (request.getMethod().equals("POST") == false) {
-            try {
-                MuokkausToiminnot.Listaus(request, response);
-                Haut.KaikkiLisukkeet(request, response);
-                naytaJSP("Etusivu_jalkeen.jsp", request, response);
-            } catch (Exception ex) {
-                Logger.getLogger(Etusivu.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            naytaJSP("Lisukkeet.jsp", request, response);
         } else {
             try {
-                Haut.getResepti(request, response, ruokalaji);
-                MuokkausToiminnot.Listaus(request, response);
-                Haut.KaikkiLisukkeet(request, response);
-                Haut.Lisukeet(request, response, ruokalaji);
-                naytaJSP("Etusivu_jalkeen.jsp", request, response);
-            } catch (Exception ex) {
-                Logger.getLogger(Etusivu.class.getName()).log(Level.SEVERE, null, ex);
-            }
+                if (Haut.TarkistaLisuke(request, response, vanhaNimi) == false) {
+                    naytaVirhe(request, "Kyseistä lisuketta ei ole tietokannassa. Yritä uudelleen.");
+                    naytaJSP("Lisukkeet.jsp", request, response);
+                }
 
+                if (!uusiNimi.isEmpty()) {
+                    if (Haut.TarkistaLisuke(request, response, uusiNimi) == true) {
+                        naytaVirhe(request, "Antamasi lisukkeen nimi on jo käytössä. Yritä uudelleen.");
+                        naytaJSP("Lisukkeet.jsp", request, response);
+                    } else {
+                        MuokkausToiminnot.MuokkaaLisukkeenNimi(vanhaNimi, uusiNimi);
+                        naytaJSP("Lisukkeet.jsp", request, response);
+                    }
+                }
+
+                if (!vanhaNimi.isEmpty() && !kuvausMuutos.isEmpty() && !uusiRuoka.isEmpty()) {
+                    MuokkausToiminnot.MuokkaaLisuketta(vanhaNimi, kuvausMuutos, uusiRuoka);
+                    naytaJSP("Lisukkeet.jsp", request, response);
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(MuutoksetMuokkaa.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
