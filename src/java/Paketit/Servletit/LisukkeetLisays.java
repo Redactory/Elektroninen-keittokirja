@@ -47,7 +47,7 @@ public class LisukkeetLisays extends ServlettiIsa {
         kuvaus = request.getParameter("description");
 
 
-        if (onkoKirjautunut(request) == true) {
+//        if (onkoKirjautunut(request) == true) {
             if (request.getMethod().equals("POST") == false) {
                 naytaJSP("Lisukkeet.jsp", request, response);
             } else {
@@ -78,9 +78,9 @@ public class LisukkeetLisays extends ServlettiIsa {
                 }
 
             }
-        } else {
-            naytaJSP("Kirjautuminen.jsp", request, response);
-        }
+//        } else {
+//            naytaJSP("Kirjautuminen.jsp", request, response);
+//        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
