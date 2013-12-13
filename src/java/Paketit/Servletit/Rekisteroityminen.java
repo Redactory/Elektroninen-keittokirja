@@ -1,6 +1,7 @@
 package Paketit.Servletit;
 
 import Paketit.Mallit.Haut;
+import Paketit.Mallit.MuokkausToiminnot;
 import Paketit.Mallit.ServlettiIsa;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -33,12 +34,17 @@ public class Rekisteroityminen extends ServlettiIsa {
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
 
+        // Parametrien.
+        String nimi = "";
+        String tunnus = "";
+        String salasana = "";
+        String salasanaUudelleen = "";
+
         // Pyydetyt parametrit.
-        String nimi = request.getParameter("name");
-        String tunnus = request.getParameter("Tunnus");
-        String salasana = request.getParameter("password");
-        String salasanaUudelleen = request.getParameter("passwordAgain");
-        int oikeudet = 0;
+        nimi = request.getParameter("name");
+        tunnus = request.getParameter("user");
+        salasana = request.getParameter("password");
+        salasanaUudelleen = request.getParameter("passwordAgain");
 
         if (request.getMethod().equals("POST") == false) {
             naytaJSP("Rekisteroityminen.jsp", request, response);
@@ -49,9 +55,13 @@ public class Rekisteroityminen extends ServlettiIsa {
                     naytaJSP("Rekisteroityminen.jsp", request, response);
                 } else if (salasana.length() < 4) {
                     naytaVirhe(request, "Salasana on liian lyhyt, anna uusi salasana.");
-                    naytaJSP("Rekisteroityminen.jsp", request, response);                    
+                    naytaJSP("Rekisteroityminen.jsp", request, response);
                 } else if (!salasana.equals(salasanaUudelleen)) {
                     naytaVirhe(request, "Salasanat ovat erillaiset, syötä salasanat uudelleen.");
+                    naytaJSP("Rekisteroityminen.jsp", request, response);
+                } else {
+                    MuokkausToiminnot.LisaaKayttaja(nimi, tunnus, salasana);
+                    naytaVirhe(request, "Tervetuloa kokkauksen ihmeelliseen maailmaan!! Olet luonut itsellesi tilin.");
                     naytaJSP("Rekisteroityminen.jsp", request, response);
                 }
 
@@ -62,6 +72,9 @@ public class Rekisteroityminen extends ServlettiIsa {
             } catch (Exception ex) {
                 Logger.getLogger(Rekisteroityminen.class.getName()).log(Level.SEVERE, null, ex);
             }
+        } else {
+            naytaVirhe(request, "Et täyttänyt kaikkia kenttiä.");
+            naytaJSP("Rekisteroityminen.jsp", request, response);
         }
 
 

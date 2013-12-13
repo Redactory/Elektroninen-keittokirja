@@ -44,33 +44,36 @@ public class LisukkeetMuokkaus extends ServlettiIsa {
         uusiRuoka = request.getParameter("newFood");
         kuvausMuutos = request.getParameter("igChange");
 
-
-        if (request.getMethod().equals("POST") == false) {
-            naytaJSP("Lisukkeet.jsp", request, response);
-        } else {
-            try {
-                if (Haut.TarkistaLisuke(request, response, vanhaNimi) == false) {
-                    naytaVirhe(request, "Kyseistä lisuketta ei ole tietokannassa. Yritä uudelleen.");
-                    naytaJSP("Lisukkeet.jsp", request, response);
-                }
-
-                if (!uusiNimi.isEmpty()) {
-                    if (Haut.TarkistaLisuke(request, response, uusiNimi) == true) {
-                        naytaVirhe(request, "Antamasi lisukkeen nimi on jo käytössä. Yritä uudelleen.");
-                        naytaJSP("Lisukkeet.jsp", request, response);
-                    } else {
-                        MuokkausToiminnot.MuokkaaLisukkeenNimi(vanhaNimi, uusiNimi);
+        if (onkoKirjautunut(request) == true) {
+            if (request.getMethod().equals("POST") == false) {
+                naytaJSP("Lisukkeet.jsp", request, response);
+            } else {
+                try {
+                    if (Haut.TarkistaLisuke(request, response, vanhaNimi) == false) {
+                        naytaVirhe(request, "Kyseistä lisuketta ei ole tietokannassa. Yritä uudelleen.");
                         naytaJSP("Lisukkeet.jsp", request, response);
                     }
-                }
 
-                if (!vanhaNimi.isEmpty() && !kuvausMuutos.isEmpty() && !uusiRuoka.isEmpty()) {
-                    MuokkausToiminnot.MuokkaaLisuketta(vanhaNimi, kuvausMuutos, uusiRuoka);
-                    naytaJSP("Lisukkeet.jsp", request, response);
+                    if (!uusiNimi.isEmpty()) {
+                        if (Haut.TarkistaLisuke(request, response, uusiNimi) == true) {
+                            naytaVirhe(request, "Antamasi lisukkeen nimi on jo käytössä. Yritä uudelleen.");
+                            naytaJSP("Lisukkeet.jsp", request, response);
+                        } else {
+                            MuokkausToiminnot.MuokkaaLisukkeenNimi(vanhaNimi, uusiNimi);
+                            naytaJSP("Lisukkeet.jsp", request, response);
+                        }
+                    }
+
+                    if (!vanhaNimi.isEmpty() && !kuvausMuutos.isEmpty() && !uusiRuoka.isEmpty()) {
+                        MuokkausToiminnot.MuokkaaLisuketta(vanhaNimi, kuvausMuutos, uusiRuoka);
+                        naytaJSP("Lisukkeet.jsp", request, response);
+                    }
+                } catch (Exception ex) {
+                    Logger.getLogger(MuutoksetMuokkaa.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            } catch (Exception ex) {
-                Logger.getLogger(MuutoksetMuokkaa.class.getName()).log(Level.SEVERE, null, ex);
             }
+        } else {
+            naytaJSP("Kirjautuminen.jsp", request, response);
         }
     }
 

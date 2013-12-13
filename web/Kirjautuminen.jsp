@@ -51,6 +51,11 @@
                     </div>
                 </div>
             </form>
+            
+            <TD><FORM METHOD="LINK" ACTION="Rekisteroityminen">
+                    <button style="float: left" type="submit3" class="btn btn-default">Kirjaudu</button>
+                </FORM></TD>
+                
         </div>
         <h1>${Virhe}</h1>
     </body>

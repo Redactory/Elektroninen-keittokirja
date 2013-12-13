@@ -18,7 +18,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     </head>
     <body>
-<div class="col-md-10">
+        <div class="col-md-10">
             <t:pohja pageTitle="Rekisteroityminen">
                 <h1>Rekisteröityminen</h1>
             </t:pohja> 
@@ -57,6 +57,12 @@
                                 <label for="inputIngredients1" class="col-md-4 control-label">Salasana uudelleen</label>
                                 <div class="col-md-8">
                                     <input type="text" class="form-control" id="inputPassword1" name="passwordAgain">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-md-10">
+                                    <button type="submit" class="btn btn-default">Syötä tiedot</button>
                                 </div>
                             </div>
                         </form>

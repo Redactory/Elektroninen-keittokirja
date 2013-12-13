@@ -1,3 +1,7 @@
+/*
+ * EI KUULU TYÖHÖN, EN PYSTYNYT SAAMAAN AJOISSA VALMIIKSI!!
+ */
+
 package Paketit.Servletit;
 
 import Paketit.Mallit.Haut;
@@ -18,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author teematve
  */
-public class LisukkeetPoisto extends ServlettiIsa {
+public class Kayttajien_hallinta extends ServlettiIsa {
 
     /**
      * Processes requests for both HTTP
@@ -32,45 +36,35 @@ public class LisukkeetPoisto extends ServlettiIsa {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");
 
-        String poistettavaLisuke = "";
-
-        // Parametrit tietueen poistoa varten.
-        poistettavaLisuke = request.getParameter("remove");
-
-        if (onkoKirjautunut(request) == true) {
-            if (request.getMethod().equals("POST") == false) {
-                naytaJSP("Lisukkeet.jsp", request, response);
-            } else {
-                try {
-                    if (Haut.TarkistaLisuke(request, response, poistettavaLisuke) == false) {
-                        naytaVirhe(request, "Kyseistä lisuketta ei ole tietokannassa. Yritä uudelleen.");
-                        naytaJSP("Lisukkeet.jsp", request, response);
-                    }
-                } catch (SQLException ex) {
-                    Logger.getLogger(MuutoksetPoisto.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (NamingException ex) {
-                    Logger.getLogger(MuutoksetPoisto.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (Exception ex) {
-                    Logger.getLogger(MuutoksetPoisto.class.getName()).log(Level.SEVERE, null, ex);
-                }
-
-
-                if (!poistettavaLisuke.isEmpty()) {
-                    try {
-                        MuokkausToiminnot.PoistaLisuke(poistettavaLisuke);
-                        naytaJSP("Lisukkeet.jsp", request, response);
-                    } catch (Exception ex) {
-                        Logger.getLogger(MuutoksetLisaykset.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                } else {
-                    naytaVirhe(request, "Nyt hommat ei menneet ihan putkeen...");
-                    naytaJSP("Lisukkeet.jsp", request, response);
-                }
+        String tunnus = "";
+        
+        tunnus = request.getParameter("sel");
+        
+        if (request.getMethod().equals("POST") == false) {
+            try {
+                Haut.getKayttajat(request, response);
+                naytaJSP("Kayttajien_hallinta.jsp", request, response);
+            } catch (SQLException ex) {
+                Logger.getLogger(Kayttajien_hallinta.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (NamingException ex) {
+                Logger.getLogger(Kayttajien_hallinta.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (Exception ex) {
+                Logger.getLogger(Kayttajien_hallinta.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
-            naytaJSP("Kirjautuminen.jsp", request, response);
+
+            if (tunnus.isEmpty()) {
+                naytaVirhe(request, "Et valinnus poistettavaa tunnusta. Yritä uudelleen.");
+                naytaJSP("Kayttajien_hallinta.jsp", request, response);
+            } else {
+                try {
+                    MuokkausToiminnot.PoistaKayttaja(tunnus);
+                    naytaJSP("Kayttajien_hallinta.jsp", request, response);
+                } catch (Exception ex) {
+                    Logger.getLogger(Kayttajien_hallinta.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
         }
     }
 

@@ -55,7 +55,7 @@ public class Haut {
 
     /* ************************************** */
     //Tietokannan kaikkien käyttäjien esittäminen.    
-    public static List<Kayttaja> getKayttajat(String tunnus, String salasana) throws SQLException, NamingException, Exception {
+    public static void getKayttajat(HttpServletRequest request, HttpServletResponse response) throws SQLException, NamingException, Exception {
         yhteys = TietokantaYhteys.yhteydenAvaus();  //Tietokantayht. avaus
 
         String sql = "SELECT Nimi, Tunnus, Salasana, Oikeudet from Kayttaja";
@@ -74,7 +74,7 @@ public class Haut {
         TietokantaYhteys.tulosSulku(tulokset);         // Lauseen sulku
         TietokantaYhteys.yhteydenSulku(yhteys);        // Tietokantayhteyden sulku.
 
-        return kayttajat;
+        request.setAttribute("kayttajat", kayttajat);
     }
 
     /* ************************************** */

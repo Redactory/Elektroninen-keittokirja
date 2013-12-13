@@ -102,18 +102,19 @@ public class MuokkausToiminnot {
     }
     
     /* ************************************** */
-    //Reseptin lisääminen tietokantaan.     
-    public static void LisaaKayttaja(String nimi, String kehittaja, String tyyppi, String raakaAineet, String ohjeet, String kuvaus) throws Exception {
+    //Reseptin lisää normi käyttäjä tietokantaan.     
+    public static void LisaaKayttaja(String nimi, String tunnus, String salasana) throws Exception {
         yhteys = TietokantaYhteys.yhteydenAvaus();  //Tietokantayht. avaus
 
-        String sql = "INSERT INTO Kayttaja VALUES (?, ?, ?, ?, ?, ?)";
+        int oikeudet = 0;
+        
+        String sql = "INSERT INTO Kayttaja VALUES (?, ?, ?, ?)";
+        
         kysely = yhteys.prepareStatement(sql);
         kysely.setString(1, nimi);
-        kysely.setString(2, kehittaja);
-        kysely.setString(3, tyyppi);
-        kysely.setString(4, raakaAineet);
-        kysely.setString(5, ohjeet);
-        kysely.setString(6, kuvaus);
+        kysely.setString(2, tunnus);
+        kysely.setString(3, salasana);
+        kysely.setInt(4, oikeudet);
         kysely.executeUpdate();
 
         TietokantaYhteys.lauseSulku(kysely);           // Kyselyn sulku
@@ -252,6 +253,23 @@ public class MuokkausToiminnot {
         TietokantaYhteys.yhteydenSulku(yhteys);        // Tietokantayhteyden sulku.
 
     }
+    
+    /* ************************************** */
+    //Lisukkeen poistaminen tietokannasta (Lisukkeet-taulu).     
+    public static void PoistaKayttaja(String tunnus) throws Exception {
+
+        yhteys = TietokantaYhteys.yhteydenAvaus();  //Tietokantayht. avaus
+
+        String sql = "DELETE FROM Kayttaja WHERE tunnus = ?";
+        kysely = yhteys.prepareStatement(sql);
+        kysely.setString(1, tunnus);
+        kysely.executeUpdate();
+
+        TietokantaYhteys.lauseSulku(kysely);           // Kyselyn sulku
+        TietokantaYhteys.tulosSulku(tulokset);         // Lauseen sulku
+        TietokantaYhteys.yhteydenSulku(yhteys);        // Tietokantayhteyden sulku.
+
+    }    
 
     /* ************************************** */
     //Lisukkeen poistaminen tietokannasta (Lisukkeet-taulu).     

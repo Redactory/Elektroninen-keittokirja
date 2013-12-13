@@ -45,27 +45,32 @@ public class MuutoksetMuokkaa extends ServlettiIsa {
         aineksetMuutos = request.getParameter("igChange");
         reseptiMuutos = request.getParameter("recipeChange");
 
-        if (request.getMethod().equals("POST") == false) {
-            naytaJSP("Muutokset.jsp", request, response);
-        } else {
-            try {
-                if (Haut.TarkistaResepti(request, response, vanhaNimi) == false) {
-                    naytaVirhe(request, "Kyseistä reseptiä ei ole tietokannassa. Yritä uudelleen.");
-                    naytaJSP("Muutokset.jsp", request, response);
-                }
 
-                if (!uusiNimi.isEmpty()) {
-                    MuokkausToiminnot.MuokkaaReseptinNimi(vanhaNimi, uusiNimi);
-                    naytaJSP("Muutokset.jsp", request, response);
-                }
+        if (onkoKirjautunut(request) == true) {
+            if (request.getMethod().equals("POST") == false) {
+                naytaJSP("Muutokset.jsp", request, response);
+            } else {
+                try {
+                    if (Haut.TarkistaResepti(request, response, vanhaNimi) == false) {
+                        naytaVirhe(request, "Kyseistä reseptiä ei ole tietokannassa. Yritä uudelleen.");
+                        naytaJSP("Muutokset.jsp", request, response);
+                    }
 
-                if (!vanhaNimi.isEmpty() && !aineksetMuutos.isEmpty() && !reseptiMuutos.isEmpty()) {
-                    MuokkausToiminnot.Muokkaa(vanhaNimi, aineksetMuutos, reseptiMuutos);
-                    naytaJSP("Muutokset.jsp", request, response);
+                    if (!uusiNimi.isEmpty()) {
+                        MuokkausToiminnot.MuokkaaReseptinNimi(vanhaNimi, uusiNimi);
+                        naytaJSP("Muutokset.jsp", request, response);
+                    }
+
+                    if (!vanhaNimi.isEmpty() && !aineksetMuutos.isEmpty() && !reseptiMuutos.isEmpty()) {
+                        MuokkausToiminnot.Muokkaa(vanhaNimi, aineksetMuutos, reseptiMuutos);
+                        naytaJSP("Muutokset.jsp", request, response);
+                    }
+                } catch (Exception ex) {
+                    Logger.getLogger(MuutoksetMuokkaa.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            } catch (Exception ex) {
-                Logger.getLogger(MuutoksetMuokkaa.class.getName()).log(Level.SEVERE, null, ex);
             }
+        } else {
+            naytaJSP("Kirjautuminen.jsp", request, response);
         }
     }
 

@@ -21,10 +21,6 @@
         <servlet-class>Paketit.Mallit.Haut</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>Hakusivu</servlet-name>
-        <servlet-class>Paketit.Servletit.Hakusivu</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>TietokantaYhteys</servlet-name>
         <servlet-class>Paketit.Mallit.TietokantaYhteys</servlet-class>
     </servlet>
@@ -72,6 +68,10 @@
         <servlet-name>Rekisteroityminen</servlet-name>
         <servlet-class>Paketit.Servletit.Rekisteroityminen</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Kayttajien_hallinta</servlet-name>
+        <servlet-class>Paketit.Servletit.Kayttajien_hallinta</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ServlettiIsa</servlet-name>
         <url-pattern>/ServlettiIsa</url-pattern>
@@ -87,10 +87,6 @@
     <servlet-mapping>
         <servlet-name>Haut</servlet-name>
         <url-pattern>/Haut</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>Hakusivu</servlet-name>
-        <url-pattern>/Hakusivu</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>TietokantaYhteys</servlet-name>
@@ -139,6 +135,10 @@
     <servlet-mapping>
         <servlet-name>Rekisteroityminen</servlet-name>
         <url-pattern>/Rekisteroityminen</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Kayttajien_hallinta</servlet-name>
+        <url-pattern>/Kayttajien_hallinta</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

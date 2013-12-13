@@ -37,7 +37,7 @@ public class MuutoksetLisaykset extends ServlettiIsa {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
-        
+
         // Parametrien alustus.
         String nimi = "";
         String tekija = "";
@@ -60,41 +60,52 @@ public class MuutoksetLisaykset extends ServlettiIsa {
         kuvaus = request.getParameter("description");
 
 
+        if (onkoKirjautunut(request) == true) {
+            if (request.getMethod().equals("POST") == false) {
+                try {
+                    Haut.getKayttajat(request, response);
+                    naytaJSP("Muutokset.jsp", request, response);
+                } catch (SQLException ex) {
+                    Logger.getLogger(MuutoksetLisaykset.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (NamingException ex) {
+                    Logger.getLogger(MuutoksetLisaykset.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (Exception ex) {
+                    Logger.getLogger(MuutoksetLisaykset.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+                try {
+                    if (nimi.isEmpty()) {
+                        naytaVirhe(request, "Alasvetovalikko ei valitse");
+                        naytaJSP("Muutokset.jsp", request, response);
+                    }
 
-        if (request.getMethod().equals("POST") == false) {
-            naytaJSP("Muutokset.jsp", request, response);
-        } else {
-            try {
-                /* 
-                boolean a = Haut.TarkistaResepti(request, response, nimi) == true;
-                boolean b = Haut.TarkistaKayttaja(request, response, tekija) == false;
-                naytaVirhe(request, (a?"resepti on olemassa":"resepti ei ole olemassa")+" "+(b?"käyttäjä ei ole olemassa":"käyttäjä on olemassa"));
-                naytaJSP("Muutokset.jsp", request, response);
-                */
-                if (Haut.TarkistaResepti(request, response, nimi) == true) {
-                    naytaVirhe(request, "Tietokannassa on jo resepti tuolla nimellä. Yritä uudelleen.");
-                    naytaJSP("Muutokset.jsp", request, response);
-                    return;
-                } else if (Haut.TarkistaKayttaja(request, response, tekija) == false) {
-                    naytaVirhe(request, "Tekijää ei ole tietokannassa. Syötä tietokannassa jo oleva henkilö.");
-                    naytaJSP("Muutokset.jsp", request, response);
-                    return;
+                    if (Haut.TarkistaResepti(request, response, nimi) == true) {
+                        naytaVirhe(request, "Tietokannassa on jo resepti tuolla nimellä. Yritä uudelleen.");
+                        naytaJSP("Muutokset.jsp", request, response);
+                        return;
+                    } else if (Haut.TarkistaKayttaja(request, response, nimi) == false) {
+                        naytaVirhe(request, "Tekijää ei ole tietokannassa. Syötä tietokannassa jo oleva henkilö.");
+                        naytaJSP("Muutokset.jsp", request, response);
+                        return;
+                    }
+                    if (!nimi.isEmpty() && !tekija.isEmpty() && !tyyppi.isEmpty() && !ainekset.isEmpty() && !tekoOhjeet.isEmpty() && !kuvaus.isEmpty()) {
+                        MuokkausToiminnot.Lisaa(nimi, tekija, tyyppi, ainekset, tekoOhjeet, kuvaus);
+                        naytaJSP("Muutokset.jsp", request, response);
+                    } else {
+                        naytaVirhe(request, "Menee tähän haaraan.");
+                        naytaJSP("Muutokset.jsp", request, response);
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(MuutoksetLisaykset.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (NamingException ex) {
+                    Logger.getLogger(MuutoksetLisaykset.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (Exception ex) {
+                    Logger.getLogger(MuutoksetLisaykset.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                if (!nimi.isEmpty() && !tekija.isEmpty() && !tyyppi.isEmpty() && !ainekset.isEmpty() && !tekoOhjeet.isEmpty() && !kuvaus.isEmpty()) {
-                    MuokkausToiminnot.Lisaa(nimi, tekija, tyyppi, ainekset, tekoOhjeet, kuvaus);
-                    naytaJSP("Muutokset.jsp", request, response);
-                } else {
-                    naytaVirhe(request, "Menee tähän haaraan.");
-                    naytaJSP("Muutokset.jsp", request, response);
-                }
-            } catch (SQLException ex) {
-                Logger.getLogger(MuutoksetLisaykset.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (NamingException ex) {
-                Logger.getLogger(MuutoksetLisaykset.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (Exception ex) {
-                Logger.getLogger(MuutoksetLisaykset.class.getName()).log(Level.SEVERE, null, ex);
+
             }
-            
+        } else {
+            naytaJSP("Kirjautuminen.jsp", request, response);
         }
     }
 

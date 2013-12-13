@@ -35,26 +35,32 @@ public class Etusivu_jalkeen extends ServlettiIsa {
         String ruokalaji = "";
         ruokalaji = request.getParameter("ruoka");
 
-        if (request.getMethod().equals("POST") == false) {
-            try {
-                MuokkausToiminnot.Listaus(request, response);
-                Haut.KaikkiLisukkeet(request, response);
-                naytaJSP("Etusivu_jalkeen.jsp", request, response);
-            } catch (Exception ex) {
-                Logger.getLogger(Etusivu.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        } else {
-            try {
-                Haut.getResepti(request, response, ruokalaji);
-                MuokkausToiminnot.Listaus(request, response);
-                Haut.KaikkiLisukkeet(request, response);
-                Haut.Lisukeet(request, response, ruokalaji);
-                naytaJSP("Etusivu_jalkeen.jsp", request, response);
-            } catch (Exception ex) {
-                Logger.getLogger(Etusivu.class.getName()).log(Level.SEVERE, null, ex);
+        if (onkoKirjautunut(request) == true) {
+            if (request.getMethod().equals("POST") == false) {
+                try {
+                    MuokkausToiminnot.Listaus(request, response);
+                    Haut.KaikkiLisukkeet(request, response);
+                    naytaJSP("Etusivu_jalkeen.jsp", request, response);
+                } catch (Exception ex) {
+                    Logger.getLogger(Etusivu.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+                try {
+                    Haut.getResepti(request, response, ruokalaji);
+                    MuokkausToiminnot.Listaus(request, response);
+                    Haut.KaikkiLisukkeet(request, response);
+                    Haut.Lisukeet(request, response, ruokalaji);
+                    naytaJSP("Etusivu_jalkeen.jsp", request, response);
+                } catch (Exception ex) {
+                    Logger.getLogger(Etusivu.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
             }
 
+        } else {
+            naytaJSP("Kirjautuminen.jsp", request, response);
         }
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

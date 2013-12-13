@@ -27,8 +27,12 @@ public class Ohjeet extends ServlettiIsa {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
-        
-        ServlettiIsa.naytaJSP("Ohjeet.jsp", request, response);
+
+        if (onkoKirjautunut(request) == true) {
+            ServlettiIsa.naytaJSP("Ohjeet.jsp", request, response);
+        } else {
+            naytaJSP("Kirjautuminen.jsp", request, response);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
